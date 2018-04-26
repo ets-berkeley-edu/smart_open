@@ -104,6 +104,16 @@ There are a few optional keyword arguments that are useful only for S3 access.
 These are both passed to `boto.s3_connect()` as keyword arguments.
 The S3 reader supports gzipped content, as long as the key is obviously a gzipped file (e.g. ends with ".gz").
 
+When uploading to S3, an optional s3_upload_args argument may contain items to be passed to `S3.Object.initiate_multipart_upload` as keyword arguments.
+
+.. code-block:: python
+  >>> s3_upload_args = {
+      'ContentEncoding': 'gzip',
+      'ContentType': 'text/plain',
+      'ServerSideEncryption': 'AES256'
+  }
+  >>> smart_open.smart_open('s3://', 'wb', s3_upload_args=s3_upload_args)
+
 Why?
 ----
 
