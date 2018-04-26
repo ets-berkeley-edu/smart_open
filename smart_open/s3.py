@@ -343,6 +343,7 @@ class BufferedOutputBase(io.BufferedIOBase):
 multipart upload may fail")
 
         session = boto3.Session(profile_name=kwargs.pop('profile_name', None))
+        s3_upload_args = kwargs.pop('s3_upload_args', {})
         s3 = session.resource('s3', **kwargs)
 
         #
@@ -354,7 +355,7 @@ multipart upload may fail")
             raise ValueError('the bucket %r does not exist, or is forbidden for access' % bucket)
         self._object = s3.Object(bucket, key)
         self._min_part_size = min_part_size
-        self._mp = self._object.initiate_multipart_upload()
+        self._mp = self._object.initiate_multipart_upload(**s3_upload_args)
 
         self._buf = io.BytesIO()
         self._total_bytes = 0
